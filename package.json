@@ -1,0 +1,34 @@
+{
+  "name": "beeclear",
+  "version": "1.0.0",
+  "description": "Node package to interface directly with BeeClear Energy Monitor devices",
+  "main": "beeclear.js",
+  "scripts": {
+    "test": "node test/test.js",
+    "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gruijter/beeclear.js.git"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "keywords": [
+    "Beeclear",
+    "P1",
+    "energy",
+    "monitor",
+    "DSMR"
+  ],
+  "author": "Robin de Gruijter <gruijter@hotmail.com>",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/gruijter/beeclear.js/issues"
+  },
+  "homepage": "https://github.com/gruijter/beeclear.js#readme",
+  "runkitExampleFilename": "test/runkitTest.js",
+  "dependencies": {
+  }
+}
