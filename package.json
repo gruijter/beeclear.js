@@ -28,7 +28,5 @@
     "url": "https://github.com/gruijter/beeclear.js/issues"
   },
   "homepage": "https://github.com/gruijter/beeclear.js#readme",
-  "runkitExampleFilename": "test/runkitTest.js",
-  "dependencies": {
-  }
+  "runkitExampleFilename": "test/runkitTest.js"
 }

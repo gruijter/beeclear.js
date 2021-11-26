@@ -305,7 +305,6 @@ class Beeclear {
 		}
 	}
 
-
 	_makeHttpRequest(options, postData, timeout) {
 		return new Promise((resolve, reject) => {
 			const opts = options;
