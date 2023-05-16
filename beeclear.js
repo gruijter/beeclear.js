@@ -2,7 +2,7 @@
 	License, v. 2.0. If a copy of the MPL was not distributed with this
 	file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-	Copyright 2020, Robin de Gruijter <gruijter@hotmail.com> */
+	Copyright 2020 - 2023, Robin de Gruijter <gruijter@hotmail.com> */
 
 'use strict';
 
@@ -226,6 +226,9 @@ class Beeclear {
 			const readings = {};
 			try {
 				const measurePower = raw.u;
+				const l1 = raw.verbruik0 - raw.leveren0;
+				const l2 = raw.verbruik1 - raw.leveren1;
+				const l3 = raw.verbruik2 - raw.leveren2;
 				const measurePowerProduced = raw.g;
 				const powerPeak = raw.uh / 1000;
 				const powerOffpeak = raw.ul / 1000;
@@ -233,6 +236,9 @@ class Beeclear {
 				const powerOffpeakProduced = raw.gl / 1000;
 				const powerTm = raw.d;
 				readings.pwr = measurePower - measurePowerProduced;
+				readings.l1 = l1;
+				readings.l2 = l2;
+				readings.l3 = l3;
 				readings.net = Math.round(10000 * (powerPeak + powerOffpeak - powerPeakProduced - powerOffpeakProduced)) / 10000;
 				readings.p2 = powerPeak;
 				readings.p1 = powerOffpeak;
@@ -330,6 +336,7 @@ class Beeclear {
 			});
 			req.on('timeout', () => {
 				req.destroy();
+				return reject(Error('timeout'));
 			});
 			req.end(postData);
 		});
@@ -366,6 +373,7 @@ class Beeclear {
 			});
 			req.on('timeout', () => {
 				req.destroy();
+				return reject(Error('timeout'));
 			});
 			req.end(postData);
 		});
@@ -447,25 +455,33 @@ module.exports = Beeclear;
 /**
 * @typedef meterReadingsShort
 * @description meterReadingsShort is an object containing actual power and gas meter information.
-* @property {number} pwr power meter total (consumption - production) in kWh. e.g. 7507.336
-* @property {number} net actual power consumption in Watt. e.g. 3030
-* @property {number} p2 consumption counter high tariff in kWh. e.g. 896.812
-* @property {number} p1 consumption counter low tariff in kWh. e.g. 16110.964
-* @property {number} n2 production counter high tariff in kWh. e.g. 4250.32
-* @property {number} n1 production counter low tariff in kWh. e.g. 1570.936
+* @property {number} pwr power meter total (consumption - production) in Watt. e.g. 646
+* @property {number} l1 power meter phase 1 (consumption - production) in Watt. e.g. 646
+* @property {number} l2 power meter phase 2 (consumption - production) in Watt. e.g. 646
+* @property {number} l3 power meter phase 3 (consumption - production) in Watt. e.g. 646
+* @property {number} net energy meter total (consumption - production) in kWh. e.g. 7507.336
+* @property {number} p2 energy consumption counter high tariff in kWh. e.g. 896.812
+* @property {number} p1 energy consumption counter low tariff in kWh. e.g. 16110.964
+* @property {number} n2 energy production counter high tariff in kWh. e.g. 4250.32
+* @property {number} n1 energy production counter low tariff in kWh. e.g. 1570.936
 * @property {number} tm time of retrieving info. unix-time-format. e.g. 1542575626
 * @property {number} gas gas-meter counter in m³. e.g. 6161.243
 * @property {number} gtm time of the last gas measurement in unix-time-format. e.g. 1542574800
 * @example // meterReadingsShort
-{	pwr: 646,
-	net: 7507.335999999999,
-	p2: 5540.311,
-	p1: 3161.826,
-	n2: 400.407,
-	n1: 794.394,
-	tm: 1560178800,
-	gas: 2162.69,
-	gtm: 1560178800 }
+{
+  pwr: 599,
+  l1: 115,
+  l2: 84,
+  l3: 399,
+  net: -2886.47,
+  p2: 5351.641,
+  p1: 5615.158,
+  n2: 9541.804,
+  n1: 4311.465,
+  tm: 1684096238,
+  gas: 5487.806,
+  gtm: 1684096208
+}
 */
 
 /**
