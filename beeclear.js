@@ -50,6 +50,7 @@ class Beeclear {
 		this.timeout = options.timeout || defaultTimeout;
 		this.username = options.username || defaultUser;
 		this.password = options.password || defaultPassword;
+		this.reversed = !!options.reversed; // for Belgian meters. Default is false.
 		this.cookie = null;
 		this.loggedIn = false;
 		this.lastResponse = undefined;
@@ -69,6 +70,7 @@ class Beeclear {
 			this.timeout = options.timeout || this.timeout;
 			this.username = options.username || this.username;
 			this.password = options.password || this.password;
+			this.reversed = Object.prototype.hasOwnProperty.call(options, 'reversed') ? options.reversed : this.reversed;
 
 			// get IP address when using beeclear.local
 			if (!this.host || this.host === defaultHost) {
@@ -259,6 +261,13 @@ class Beeclear {
 			if (!readings.tm && !readings.gtm) {
 				throw Error('Error parsing meter info');
 			}
+			if (this.reversed) {
+				const tmp = { ...readings };
+				readings.p1 = tmp.p2;
+				readings.p2 = tmp.p1;
+				readings.n1 = tmp.n2;
+				readings.n2 = tmp.n1;
+			}
 			return Promise.resolve(readings);
 		} catch (error) {
 			return Promise.reject(error);
@@ -417,6 +426,7 @@ module.exports = Beeclear;
 * @property {number} [port = 80] - The port of the Beeclear P1. Defaults to 80. TLS/SSL will be used when setting port to 443.
 * @property {boolean} [useTLS = false] - use TLS (HTTPS).
 * @property {number} [timeout = 4000] - http(s) timeout in milliseconds. Defaults to 4000ms.
+* @property {boolean} [reversed = false] - Reverse the peak and offPeak meters. Required in Belgium.
 * @example // session options
 { username: 'beeclear',
   password: 'energie',
